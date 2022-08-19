@@ -147,6 +147,7 @@ void decode(string &ENCODED_STRING , TreeNode *root, int OFFSET)
     int i = 0;
     int total_size = (int)ENCODED_STRING_BINARY.length() - (8 - OFFSET);
     TreeNode *curr;
+    DECODED_STRING = "";
     while(i < total_size)
     {
         curr = root;
@@ -199,7 +200,7 @@ int main()
     string FILENAME_EXT_REM = "";
     for(int i = 0; i < (int)FILE_NAME.length() - 4; i++)
         FILENAME_EXT_REM.push_back(FILE_NAME[i]);
-    write_file(ENCODED_STRING, "example_compressed.txt");
+    write_file(ENCODED_STRING, FILENAME_EXT_REM + "_compressed.txt");
     cout<<"COMPRESSON DONE -_- ! "<<endl;
     loadFile(FILENAME_EXT_REM + "_compressed.txt", ENCODED_STRING); 
     decode(ENCODED_STRING, root, OFFSET);
