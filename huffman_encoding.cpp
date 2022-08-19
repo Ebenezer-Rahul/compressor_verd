@@ -35,6 +35,7 @@ string ENCODED_STRING;
 string DECODED_STRING;
 void loadFile(string FILE_NAME, string &str)
 {
+    INPUT_STRING = "";
     ifstream input_file(FILE_NAME);
     input_file.seekg(0, std::ios::end);
     str.reserve(input_file.tellg());
@@ -166,19 +167,45 @@ void decode(string &ENCODED_STRING , TreeNode *root, int OFFSET)
 }
 
 
+void write_file(string &ENCODED_STRING, string FILE_NAME)
+{
+    ofstream file(FILE_NAME);
+    file << ENCODED_STRING;
+}
+
+
+
+
 int main()
 {
-    loadFile("example.txt",INPUT_STRING);
+    string FILE_NAME;
+    cout<<"ENTER THE NAME OF FILE YOU WANT TO COMPRESS : ";
+    cin >> FILE_NAME;
+    cout<<"COMPRESSING........"<<endl;
+    loadFile(FILE_NAME ,INPUT_STRING);
     TreeNode *root = generate_encoding_tree(INPUT_STRING);
     string temp;
     mapTobits(root, temp);
     encode(INPUT_STRING);
-    cout<<root->freq<<endl;
-    cout<<ENCODED_STRING.size()<<endl;
-    //cout<<ENCODED_STRING_BINARY<<endl;
-    //cout<<ENCODED_STRING_BINARY.size()<<endl;
+    cout<<"Size of the orginal file is : "<<root->freq<<" bits .."<<endl;
+    cout<<"Size of the compressed FILE is : "<<ENCODED_STRING.size()<< " bits .."<<endl;
+    float compression_ratio = (float)root->freq / (int) ENCODED_STRING.size();
+    cout<<"compression ratio : "<<compression_ratio;
+    if(compression_ratio > 1 && compression_ratio < 1.5)
+        cout<<" it went great";
+    else if(compression_ratio > 1.5)
+        cout<<" it went fucking Great!!!!!";
+    cout<<endl;
+    string FILENAME_EXT_REM = "";
+    for(int i = 0; i < (int)FILE_NAME.length() - 4; i++)
+        FILENAME_EXT_REM.push_back(FILE_NAME[i]);
+    write_file(ENCODED_STRING, "example_compressed.txt");
+    cout<<"COMPRESSON DONE -_- ! "<<endl;
+    loadFile(FILENAME_EXT_REM + "_compressed.txt", ENCODED_STRING); 
     decode(ENCODED_STRING, root, OFFSET);
-    cout<<DECODED_STRING<<endl;
+    cout<<"DECOMPRESSING THE FILE ........"<<endl;
+    write_file(DECODED_STRING,FILENAME_EXT_REM + "_uncompressed.txt");
+    cout<<"DECOMPRESSION DONE -_- !"<<endl;
     return 0;
 }
 
